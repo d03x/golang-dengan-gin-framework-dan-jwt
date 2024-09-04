@@ -1,10 +1,13 @@
 package routes
 
 import (
+	"time"
+
 	"dadandev.com/golang-dasar/internal/domain"
 	"dadandev.com/golang-dasar/internal/dto"
 	"dadandev.com/golang-dasar/internal/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 type userRouter struct {
@@ -20,16 +23,17 @@ func NewUser(gin *gin.Engine, userService domain.UserService) {
 
 func (ur userRouter) Login(context *gin.Context) {
 	_ = ur.userService.Authenticate()
-
-	// signedToken, err := utils.GenerateJWTToken(jwt.MapClaims{
-	// 	"user_id": "2804",
-	// 	"expired": time.Now().Add(time.Hour * 1).Unix(),
-	// })
-	// if err != nil {
-	// 	context.Error(err)
-	// }
-	signedToken, _ := utils.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkIjoxNzI1MjA2MzI2LCJ1c2VyX2lkIjoiMjgwNCJ9.Q9T6hCnhlbAJSFjFJ3VAYVRqQTxwLg5n3-tRjwDHOVs")
+	var dtoUserResponse dto.ResponseAcessToken
+	_, err := utils.GenerateJWTToken(jwt.MapClaims{
+		"user_id": "2804",
+		"expired": time.Now().Add(time.Hour * 1).Unix(),
+	}, &dtoUserResponse)
+	if err != nil {
+		context.Error(err)
+	}
+	// AcessToken, _ := utils.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkIjoxNzI1NDMyOTMzLCJ1c2VyX2lkIjoiMjgwNCJ9.7ADF_eeiN-Mu1uLe8Sen_XsRV9e_CndfBHUyqMkc6lA")
 	var userDto dto.UserRequestDto
+
 	context.ShouldBindBodyWithJSON(&userDto)
-	context.JSON(200, signedToken)
+	context.JSON(200, dtoUserResponse)
 }

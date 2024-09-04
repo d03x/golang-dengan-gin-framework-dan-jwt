@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"time"
 
+	"dadandev.com/golang-dasar/internal/dto"
 	"github.com/dgrijalva/jwt-go"
 )
 
 var SignedKey = []byte("n983274hr98ew7r379847324")
 
-func GenerateJWTToken(claims jwt.Claims) (signedToken string, err error) {
+func GenerateJWTToken(claims jwt.Claims, userResponse *dto.ResponseAcessToken) (signedToken string, err error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err = token.SignedString(SignedKey)
+	userResponse.AccessToken = signedToken
 	return
 }
 func ValidateToken(tokenString string) (jwt.MapClaims, error) {

@@ -5,7 +5,11 @@ type ResponseUserToken struct {
 	Message string
 }
 type UserRequestDto struct {
-	Email      string `form:"email"`
-	Password   string `form:"password"`
-	RememberMe bool   `form:"remember_me"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	RememberMe bool   `json:"remember_me"`
+}
+
+type ResponseAcessToken struct {
+	AccessToken string `json:"access_token"`
 }

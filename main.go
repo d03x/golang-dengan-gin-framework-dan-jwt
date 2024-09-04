@@ -1,14 +1,20 @@
 package main
 
 import (
+	"embed"
+	"fmt"
+
 	"dadandev.com/golang-dasar/internal/repositories"
 	"dadandev.com/golang-dasar/internal/routes"
 	"dadandev.com/golang-dasar/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
-// run main entry point
+//go:embed html/*
+var content embed.FS
+
 func main() {
+	fmt.Print(content)
 	router := gin.Default()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
